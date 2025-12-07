@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ses Görselleştirici</title>
+    <title>Gelişmiş Ses Görselleştirici</title>
     <style>
         * {
             margin: 0;
@@ -16,51 +16,47 @@
             background: #0a0a14;
             color: #fff;
             min-height: 100vh;
-            overflow-x: hidden;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
         }
         
         header {
             text-align: center;
-            padding: 15px 0;
-            width: 100%;
+            margin-bottom: 25px;
         }
         
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             color: #0ea5e9;
         }
         
         .content {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 350px 1fr;
             gap: 25px;
-            width: 100%;
-            justify-content: center;
+        }
+        
+        @media (max-width: 1100px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
         }
         
         .left-panel {
-            flex: 1;
-            min-width: 300px;
-            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         
-        .upload-section {
-            background: rgba(20, 25, 40, 0.9);
+        .panel-section {
+            background: rgba(25, 30, 45, 0.9);
             border-radius: 12px;
             padding: 20px;
-            width: 100%;
-            margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
@@ -68,6 +64,15 @@
             font-size: 1.2rem;
             color: #0ea5e9;
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
         
         .upload-box {
@@ -75,55 +80,54 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
-            padding: 25px 15px;
+            padding: 20px;
             border: 2px dashed #475569;
             border-radius: 10px;
-            transition: all 0.3s ease;
-            background: rgba(30, 35, 50, 0.5);
+            transition: all 0.3s;
+            background: rgba(35, 40, 55, 0.5);
         }
         
         .upload-box:hover {
             border-color: #0ea5e9;
+            background: rgba(14, 165, 233, 0.1);
         }
         
         .upload-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #0ea5e9;
         }
         
         .upload-text h4 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1rem;
             text-align: center;
         }
         
         .upload-text p {
             color: #94a3b8;
+            font-size: 0.85rem;
             text-align: center;
-            font-size: 0.9rem;
         }
         
         #audioUpload, #imageUpload {
             display: none;
         }
         
-        .audio-info, .image-info {
-            margin-top: 12px;
+        .file-info {
             padding: 12px;
-            background: rgba(30, 35, 50, 0.8);
+            background: rgba(35, 40, 55, 0.8);
             border-radius: 8px;
             display: none;
             border-left: 3px solid #0ea5e9;
         }
         
-        .audio-info.active, .image-info.active {
+        .file-info.active {
             display: block;
         }
         
         .info-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin-bottom: 3px;
             color: #e2e8f0;
         }
@@ -134,18 +138,15 @@
         }
         
         .controls {
-            background: rgba(20, 25, 40, 0.9);
-            border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
         
         .control-buttons {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 15px;
         }
         
         .control-btn {
@@ -153,10 +154,10 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 12px 15px;
-            font-size: 0.95rem;
+            padding: 12px;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -170,104 +171,145 @@
         .control-btn:disabled {
             background: #475569;
             cursor: not-allowed;
+            opacity: 0.6;
         }
         
         .control-btn i {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .download-btn {
             background: #10b981;
-            grid-column: span 2;
+            grid-column: span 3;
         }
         
         .download-btn:hover {
             background: #059669;
         }
         
-        .volume-section {
-            margin-top: 15px;
+        .settings {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
         
-        .volume-control {
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .setting-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 6px;
         }
         
-        .volume-control label {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            min-width: 70px;
+        .wave-mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
         
-        #volumeSlider {
-            flex: 1;
-            height: 6px;
-            -webkit-appearance: none;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.1);
-            outline: none;
-        }
-        
-        #volumeSlider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #0ea5e9;
+        .wave-mode-btn {
+            background: rgba(35, 40, 55, 0.8);
+            border: 1px solid #475569;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.85rem;
             cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
         }
         
-        .volume-value {
-            color: #0ea5e9;
-            font-weight: bold;
-            min-width: 35px;
-            text-align: right;
-            font-size: 0.9rem;
+        .wave-mode-btn.active {
+            background: #0ea5e9;
+            border-color: #0ea5e9;
         }
         
-        .right-panel {
-            flex: 1.5;
-            min-width: 300px;
-            max-width: 700px;
+        .theme-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .theme-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .theme-color.active {
+            border-color: white;
+            transform: scale(1.1);
+        }
+        
+        .custom-color {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        #waveColorPicker {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+        }
+        
+        .visualizer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         
         .visualizer-container {
-            background: rgba(20, 25, 40, 0.9);
+            background: rgba(25, 30, 45, 0.9);
             border-radius: 12px;
-            padding: 25px;
-            width: 100%;
-            height: 100%;
+            padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
             overflow: hidden;
-            min-height: 450px;
+            min-height: 500px;
         }
         
         #visualizerCanvas {
             display: block;
-            border-radius: 6px;
+            background: rgba(10, 10, 20, 0.95);
+            border-radius: 8px;
             width: 100% !important;
-            height: 400px !important;
-            background: rgba(5, 5, 15, 0.95);
+            height: 460px !important;
         }
         
-        .center-circle {
+        .center-image {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid rgba(255, 255, 255, 0.3);
             z-index: 10;
             background: rgba(20, 20, 30, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         #centerImage {
@@ -277,188 +319,222 @@
             display: none;
         }
         
-        .default-circle {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.2));
-            color: rgba(255, 255, 255, 0.8);
+        .default-image {
+            color: rgba(255, 255, 255, 0.6);
             text-align: center;
-            padding: 10px;
+            padding: 15px;
+            font-size: 0.85rem;
         }
         
-        .default-circle i {
-            font-size: 2.5rem;
+        .default-image i {
+            font-size: 2rem;
             margin-bottom: 8px;
+            display: block;
+        }
+        
+        .recording-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+        }
+        
+        .recording-indicator.active {
+            display: flex;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
         }
         
         .loading {
-            display: none;
             text-align: center;
             color: #0ea5e9;
             font-size: 0.9rem;
-            margin-top: 10px;
+            display: none;
         }
         
         .loading.active {
             display: block;
         }
         
-        @media (max-width: 1000px) {
-            .content {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .left-panel, .right-panel {
-                max-width: 100%;
-                width: 100%;
-            }
-            
-            .visualizer-container {
-                min-height: 400px;
-            }
-            
-            #visualizerCanvas {
-                height: 350px !important;
-            }
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #64748b;
+            font-size: 0.85rem;
         }
         
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-            
-            .upload-section, .controls, .visualizer-container {
-                padding: 15px;
-            }
-            
-            .control-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .download-btn {
-                grid-column: span 1;
-            }
-            
-            .visualizer-container {
-                min-height: 350px;
-                padding: 15px;
-            }
-            
-            #visualizerCanvas {
-                height: 300px !important;
-            }
-            
-            .center-circle {
-                width: 120px;
-                height: 120px;
-            }
-        }
+        /* Temalar için renkler */
+        .theme-blue { background: linear-gradient(135deg, #0ea5e9, #3b82f6); }
+        .theme-purple { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+        .theme-green { background: linear-gradient(135deg, #10b981, #14b8a6); }
+        .theme-red { background: linear-gradient(135deg, #ef4444, #f97316); }
+        .theme-pink { background: linear-gradient(135deg, #ec4899, #d946ef); }
+        .theme-cyan { background: linear-gradient(135deg, #06b6d4, #0ea5e9); }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>360° Ses Görselleştirici</h1>
+            <h1><i class="fas fa-wave-square"></i> Gelişmiş Ses Görselleştirici</h1>
         </header>
         
         <div class="content">
             <div class="left-panel">
-                <section class="upload-section">
-                    <h3 class="section-title">Ses Dosyası</h3>
-                    <label for="audioUpload" class="upload-box">
-                        <div class="upload-icon">
-                            <i class="fas fa-file-audio"></i>
+                <!-- Dosya Yükleme -->
+                <div class="panel-section">
+                    <h3 class="section-title"><i class="fas fa-music"></i> Ses Dosyası</h3>
+                    <div class="upload-area">
+                        <label for="audioUpload" class="upload-box">
+                            <div class="upload-icon">
+                                <i class="fas fa-file-audio"></i>
+                            </div>
+                            <div class="upload-text">
+                                <h4>MP3 / WAV Dosyası</h4>
+                                <p>Tıklayarak veya sürükleyin</p>
+                            </div>
+                        </label>
+                        <input type="file" id="audioUpload" accept="audio/*">
+                        
+                        <div class="file-info" id="audioInfo">
+                            <div class="info-title" id="audioTitle">Ses dosyası bekleniyor</div>
+                            <div class="info-detail" id="audioDuration">Bir dosya seçin</div>
                         </div>
-                        <div class="upload-text">
-                            <h4>MP3 / WAV</h4>
-                            <p>Ses dosyası seçin</p>
-                        </div>
-                    </label>
-                    <input type="file" id="audioUpload" accept="audio/*">
-                    
-                    <div class="audio-info" id="audioInfo">
-                        <div class="info-title" id="audioTitle"></div>
-                        <div class="info-detail" id="audioDuration"></div>
                     </div>
                     
-                    <h3 class="section-title" style="margin-top: 20px;">Merkez Görsel</h3>
-                    <label for="imageUpload" class="upload-box">
-                        <div class="upload-icon">
-                            <i class="fas fa-images"></i>
+                    <h3 class="section-title" style="margin-top: 20px;"><i class="fas fa-image"></i> Merkez Görsel</h3>
+                    <div class="upload-area">
+                        <label for="imageUpload" class="upload-box">
+                            <div class="upload-icon">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <div class="upload-text">
+                                <h4>Görsel (İsteğe Bağlı)</h4>
+                                <p>JPG, PNG formatında</p>
+                            </div>
+                        </label>
+                        <input type="file" id="imageUpload" accept="image/*">
+                        
+                        <div class="file-info" id="imageInfo">
+                            <div class="info-title" id="imageTitle">Görsel yok</div>
+                            <div class="info-detail" id="imageSize">İsteğe bağlı ekleyin</div>
                         </div>
-                        <div class="upload-text">
-                            <h4>JPG / PNG</h4>
-                            <p>Daire için görsel</p>
-                        </div>
-                    </label>
-                    <input type="file" id="imageUpload" accept="image/*">
-                    
-                    <div class="image-info" id="imageInfo">
-                        <div class="info-title" id="imageTitle"></div>
-                        <div class="info-detail" id="imageSize"></div>
                     </div>
                     
                     <div class="loading" id="loading">
                         <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
                     </div>
-                </section>
+                </div>
                 
-                <section class="controls">
-                    <div class="control-buttons">
-                        <button id="playBtn" class="control-btn" disabled>
-                            <i class="fas fa-play"></i> Oynat
-                        </button>
-                        <button id="pauseBtn" class="control-btn" disabled>
-                            <i class="fas fa-pause"></i> Duraklat
-                        </button>
-                        <button id="stopBtn" class="control-btn" disabled>
-                            <i class="fas fa-stop"></i> Durdur
-                        </button>
-                        <button id="downloadBtn" class="control-btn download-btn" disabled>
-                            <i class="fas fa-download"></i> Video İndir
-                        </button>
-                    </div>
-                    
-                    <div class="volume-section">
-                        <div class="volume-control">
-                            <label for="volumeSlider">Ses:</label>
-                            <input type="range" id="volumeSlider" min="0" max="100" value="70">
-                            <span class="volume-value" id="volumeValue">70%</span>
+                <!-- Kontroller -->
+                <div class="panel-section">
+                    <h3 class="section-title"><i class="fas fa-sliders-h"></i> Kontroller</h3>
+                    <div class="controls">
+                        <div class="control-buttons">
+                            <button id="playBtn" class="control-btn" disabled>
+                                <i class="fas fa-play"></i> Oynat
+                            </button>
+                            <button id="pauseBtn" class="control-btn" disabled>
+                                <i class="fas fa-pause"></i> Duraklat
+                            </button>
+                            <button id="stopBtn" class="control-btn" disabled>
+                                <i class="fas fa-stop"></i> Durdur
+                            </button>
+                            <button id="downloadBtn" class="control-btn download-btn" disabled>
+                                <i class="fas fa-video"></i> Video Kaydet
+                            </button>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">
+                                <i class="fas fa-volume-up"></i> Ses Seviyesi
+                            </label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" id="volumeSlider" min="0" max="100" value="70" style="flex: 1;">
+                                <span id="volumeValue" style="color: #0ea5e9; font-weight: bold; min-width: 40px;">70%</span>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
+                
+                <!-- Ayarlar -->
+                <div class="panel-section">
+                    <h3 class="section-title"><i class="fas fa-cogs"></i> Ayarlar</h3>
+                    <div class="settings">
+                        <div class="setting-group">
+                            <label class="setting-label">Dalga Modu</label>
+                            <div class="wave-mode-selector">
+                                <button class="wave-mode-btn active" data-mode="normal">
+                                    Normal
+                                </button>
+                                <button class="wave-mode-btn" data-mode="bass">
+                                    Bass
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">Tema Renkleri</label>
+                            <div class="theme-selector">
+                                <div class="theme-color theme-blue active" data-color="#0ea5e9"></div>
+                                <div class="theme-color theme-purple" data-color="#8b5cf6"></div>
+                                <div class="theme-color theme-green" data-color="#10b981"></div>
+                                <div class="theme-color theme-red" data-color="#ef4444"></div>
+                                <div class="theme-color theme-pink" data-color="#ec4899"></div>
+                                <div class="theme-color theme-cyan" data-color="#06b6d4"></div>
+                            </div>
+                            
+                            <div class="custom-color">
+                                <label class="setting-label">Özel Renk:</label>
+                                <input type="color" id="waveColorPicker" value="#0ea5e9">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="right-panel">
-                <section class="visualizer-container">
+            <!-- Görselleştirici -->
+            <div class="visualizer-section">
+                <div class="visualizer-container">
+                    <div class="recording-indicator" id="recordingIndicator">
+                        <i class="fas fa-circle"></i> Kayıt Ediliyor
+                    </div>
                     <canvas id="visualizerCanvas"></canvas>
-                    <div class="center-circle" id="centerCircle">
+                    <div class="center-image">
                         <img id="centerImage" alt="Merkez Görsel">
-                        <div class="default-circle" id="defaultCircle">
+                        <div class="default-image" id="defaultImage">
                             <i class="fas fa-image"></i>
-                            <div>Görsel yok</div>
+                            Görsel yok
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
         </div>
+        
+        <footer>
+            <p>Ses Görselleştirici v4.0 | Tüm hakları saklıdır © 2024</p>
+        </footer>
     </div>
 
-    <!-- Video kaydı için gerekli script -->
-    <script src="https://cdn.jsdelivr.net/npm/ccapture.js@1.1.0/build/CCapture.all.min.js"></script>
+    <!-- Video kaydı için -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ccapture.js/1.1.0/CCapture.all.min.js"></script>
     
     <script>
-        // DOM elementlerini seçme
+        // DOM Elementleri
         const audioUpload = document.getElementById('audioUpload');
         const audioInfo = document.getElementById('audioInfo');
         const audioTitle = document.getElementById('audioTitle');
@@ -477,42 +553,47 @@
         const volumeSlider = document.getElementById('volumeSlider');
         const volumeValue = document.getElementById('volumeValue');
         const canvas = document.getElementById('visualizerCanvas');
-        const centerCircle = document.getElementById('centerCircle');
         const centerImage = document.getElementById('centerImage');
-        const defaultCircle = document.getElementById('defaultCircle');
+        const defaultImage = document.getElementById('defaultImage');
+        const recordingIndicator = document.getElementById('recordingIndicator');
         
-        // Canvas bağlamı
+        const waveModeBtns = document.querySelectorAll('.wave-mode-btn');
+        const themeColors = document.querySelectorAll('.theme-color');
+        const waveColorPicker = document.getElementById('waveColorPicker');
+        
+        // Canvas Context
         const ctx = canvas.getContext('2d');
         
-        // Ses bağlamı ve analizör
+        // Audio System
         let audioContext;
         let audioSource;
         let analyser;
         let dataArray;
         let bufferLength;
         
-        // Ses öğesi
+        // Audio Element
         const audioElement = new Audio();
         let isPlaying = false;
-        let isInitialized = false;
-        let centerImageLoaded = null;
+        let currentAudioUrl = null;
+        let currentImageUrl = null;
         
-        // Video kaydı için
-        let capturer = null;
+        // Visualization Settings
+        let waveMode = 'normal'; // 'normal' veya 'bass'
+        let waveColor = '#0ea5e9';
         let isRecording = false;
-        let recordedFrames = [];
-        let recordingInterval = null;
+        let capturer = null;
+        let recordingStartTime = 0;
         
-        // Optimize değişkenler
-        let animationFrameId = null;
-        let barsCount = 120; // Optimize için 120 bar
+        // Animation
+        let animationId = null;
         let wavePoints = [];
+        const barsCount = 150;
         
-        // Canvas boyutlarını ayarla
+        // Canvas Setup
         function setupCanvas() {
             const container = canvas.parentElement;
-            const containerWidth = container.clientWidth - 50;
-            const containerHeight = 400;
+            const containerWidth = container.clientWidth - 40;
+            const containerHeight = 460;
             
             const dpi = window.devicePixelRatio || 1;
             canvas.style.width = containerWidth + 'px';
@@ -520,47 +601,65 @@
             canvas.width = containerWidth * dpi;
             canvas.height = containerHeight * dpi;
             ctx.scale(dpi, dpi);
-            
-            // Merkez daire konumunu güncelle
-            updateCenterCirclePosition();
         }
         
-        // Merkez daire konumunu güncelle
-        function updateCenterCirclePosition() {
-            const width = canvas.width / (window.devicePixelRatio || 1);
-            const height = canvas.height / (window.devicePixelRatio || 1);
-            
-            centerCircle.style.left = '50%';
-            centerCircle.style.top = '50%';
-        }
-        
-        // Başlangıçta canvas boyutlarını ayarla
-        window.addEventListener('load', function() {
+        // Initialize
+        window.addEventListener('load', () => {
             setupCanvas();
-            audioTitle.textContent = "Ses dosyası bekleniyor";
-            audioDuration.textContent = "Bir MP3 veya WAV dosyası yükleyin";
+            initWavePoints();
             audioInfo.classList.add('active');
-            
-            imageTitle.textContent = "Merkez görsel yok";
-            imageSize.textContent = "İsteğe bağlı görsel ekleyin";
             imageInfo.classList.add('active');
+            
+            // Event listeners for theme colors
+            themeColors.forEach(color => {
+                color.addEventListener('click', () => {
+                    themeColors.forEach(c => c.classList.remove('active'));
+                    color.classList.add('active');
+                    waveColor = color.dataset.color;
+                    waveColorPicker.value = waveColor;
+                });
+            });
+            
+            waveColorPicker.addEventListener('input', (e) => {
+                waveColor = e.target.value;
+                themeColors.forEach(c => c.classList.remove('active'));
+            });
+            
+            waveModeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    waveModeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    waveMode = btn.dataset.mode;
+                });
+            });
         });
         
         window.addEventListener('resize', setupCanvas);
         
-        // Ses dosyası yüklendiğinde
-        audioUpload.addEventListener('change', function(e) {
+        // Audio File Handler
+        audioUpload.addEventListener('change', handleAudioFile);
+        
+        function handleAudioFile(e) {
             const file = e.target.files[0];
             if (!file) return;
             
+            // Clear previous audio
+            if (currentAudioUrl) {
+                URL.revokeObjectURL(currentAudioUrl);
+                audioElement.pause();
+                audioElement.src = '';
+                isPlaying = false;
+                resetControls();
+            }
+            
             loading.classList.add('active');
-            audioTitle.textContent = `Ses: ${file.name}`;
+            audioTitle.textContent = file.name;
             audioDuration.textContent = 'Yükleniyor...';
             
-            const objectURL = URL.createObjectURL(file);
-            audioElement.src = objectURL;
+            currentAudioUrl = URL.createObjectURL(file);
+            audioElement.src = currentAudioUrl;
             
-            audioElement.addEventListener('loadedmetadata', function() {
+            audioElement.addEventListener('loadedmetadata', () => {
                 const duration = audioElement.duration;
                 const minutes = Math.floor(duration / 60);
                 const seconds = Math.floor(duration % 60);
@@ -570,93 +669,102 @@
                 loading.classList.remove('active');
                 
                 playBtn.disabled = false;
-                pauseBtn.disabled = true;
-                stopBtn.disabled = false;
                 downloadBtn.disabled = false;
                 
-                initAudioAnalyser();
+                initAudioSystem();
             });
             
-            audioElement.addEventListener('error', function() {
+            audioElement.addEventListener('error', () => {
                 loading.classList.remove('active');
                 alert('Ses dosyası yüklenemedi.');
             });
-        });
+        }
         
-        // Görsel dosyası yüklendiğinde
-        imageUpload.addEventListener('change', function(e) {
+        // Image File Handler
+        imageUpload.addEventListener('change', handleImageFile);
+        
+        function handleImageFile(e) {
             const file = e.target.files[0];
             if (!file) return;
             
+            // Clear previous image
+            if (currentImageUrl) {
+                URL.revokeObjectURL(currentImageUrl);
+            }
+            
             const fileSize = (file.size / 1024).toFixed(1);
-            imageTitle.textContent = `Görsel: ${file.name}`;
-            imageSize.textContent = `Boyut: ${fileSize} KB`;
+            imageTitle.textContent = file.name;
+            imageSize.textContent = `${fileSize} KB`;
             imageInfo.classList.add('active');
             
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                centerImageLoaded = new Image();
-                centerImageLoaded.onload = function() {
-                    defaultCircle.style.display = 'none';
-                    centerImage.src = centerImageLoaded.src;
-                    centerImage.style.display = 'block';
-                };
-                centerImageLoaded.src = event.target.result;
+            currentImageUrl = URL.createObjectURL(file);
+            
+            const img = new Image();
+            img.onload = () => {
+                defaultImage.style.display = 'none';
+                centerImage.src = currentImageUrl;
+                centerImage.style.display = 'block';
             };
-            reader.readAsDataURL(file);
-        });
+            img.src = currentImageUrl;
+        }
         
-        // Sürükle-bırak
+        // Drag and Drop
         document.querySelectorAll('.upload-box').forEach(box => {
-            box.addEventListener('dragover', function(e) {
+            box.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                this.style.borderColor = '#0ea5e9';
+                box.style.borderColor = '#0ea5e9';
             });
             
-            box.addEventListener('dragleave', function() {
-                this.style.borderColor = '#475569';
+            box.addEventListener('dragleave', () => {
+                box.style.borderColor = '#475569';
             });
             
-            box.addEventListener('drop', function(e) {
+            box.addEventListener('drop', (e) => {
                 e.preventDefault();
-                this.style.borderColor = '#475569';
+                box.style.borderColor = '#475569';
                 
                 if (e.dataTransfer.files.length) {
                     const file = e.dataTransfer.files[0];
-                    if (file.type.startsWith('audio/')) {
+                    if (file.type.startsWith('audio/') && box.closest('label[for="audioUpload"]')) {
                         audioUpload.files = e.dataTransfer.files;
-                        const event = new Event('change', { bubbles: true });
-                        audioUpload.dispatchEvent(event);
-                    } else if (file.type.startsWith('image/')) {
+                        handleAudioFile({ target: audioUpload });
+                    } else if (file.type.startsWith('image/') && box.closest('label[for="imageUpload"]')) {
                         imageUpload.files = e.dataTransfer.files;
-                        const event = new Event('change', { bubbles: true });
-                        imageUpload.dispatchEvent(event);
+                        handleImageFile({ target: imageUpload });
                     }
                 }
             });
         });
         
-        // Ses analizörünü kur
-        function initAudioAnalyser() {
-            if (audioSource) audioSource.disconnect();
-            if (audioContext) audioContext.close();
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        // Audio System Initialization
+        function initAudioSystem() {
+            // Clean up previous
+            if (audioSource) {
+                audioSource.disconnect();
+            }
+            if (audioContext) {
+                audioContext.close().catch(console.error);
+            }
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
             
+            // Create new
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             audioSource = audioContext.createMediaElementSource(audioElement);
             analyser = audioContext.createAnalyser();
             
-            analyser.fftSize = 2048;
+            analyser.fftSize = waveMode === 'bass' ? 512 : 2048;
             bufferLength = analyser.frequencyBinCount;
             dataArray = new Uint8Array(bufferLength);
             
             audioSource.connect(analyser);
             analyser.connect(audioContext.destination);
             
-            isInitialized = true;
+            initWavePoints();
         }
         
-        // Dalga noktalarını başlat
+        // Initialize Wave Points
         function initWavePoints() {
             wavePoints = [];
             const angleStep = (Math.PI * 2) / barsCount;
@@ -664,169 +772,162 @@
             for (let i = 0; i <= barsCount; i++) {
                 wavePoints.push({
                     angle: i * angleStep,
-                    lastAmplitude: 0,
                     targetAmplitude: 0,
-                    currentAmplitude: 0
+                    currentAmplitude: 0,
+                    velocity: 0
                 });
             }
         }
         
-        // Görselleştiriciyi çiz
-        function drawVisualizer(currentTime) {
-            if (!isPlaying || !isInitialized) {
-                animationFrameId = requestAnimationFrame(drawVisualizer);
+        // Draw Visualizer
+        function drawVisualizer(timestamp) {
+            if (!isPlaying) {
+                animationId = requestAnimationFrame(drawVisualizer);
                 return;
             }
             
-            // Analizörden veri al
-            analyser.getByteFrequencyData(dataArray);
-            
-            // Canvas boyutları
+            // Clear canvas
             const width = canvas.width / (window.devicePixelRatio || 1);
             const height = canvas.height / (window.devicePixelRatio || 1);
             
-            // Arkaplan
-            ctx.fillStyle = 'rgba(5, 5, 15, 1)';
+            ctx.fillStyle = 'rgba(10, 10, 20, 0.95)';
             ctx.fillRect(0, 0, width, height);
             
-            // Merkez noktası ve daire boyutu
+            // Get frequency data
+            analyser.getByteFrequencyData(dataArray);
+            
+            // Center and radius
             const centerX = width / 2;
             const centerY = height / 2;
-            const circleRadius = Math.min(width, height) * 0.15;
+            const circleRadius = Math.min(width, height) * 0.18;
             
-            // Ses şiddeti
+            // Calculate intensity
             let totalIntensity = 0;
-            for (let i = 0; i < 100; i++) totalIntensity += dataArray[i];
-            const intensity = totalIntensity / 100 / 255;
+            const sampleCount = waveMode === 'bass' ? 20 : 50;
+            for (let i = 0; i < sampleCount; i++) {
+                totalIntensity += dataArray[i];
+            }
+            const intensity = totalIntensity / sampleCount / 255;
             
-            // Titreşim efekti
-            const vibrationX = Math.sin(currentTime * 0.005) * intensity * 15;
-            const vibrationY = Math.cos(currentTime * 0.006) * intensity * 15;
+            // Vibration effect
+            const vibrationX = Math.sin(timestamp * 0.005) * intensity * 12;
+            const vibrationY = Math.cos(timestamp * 0.006) * intensity * 12;
             
-            // Merkez daireyi hareket ettir
-            centerCircle.style.transform = `translate(-50%, -50%) translate(${vibrationX}px, ${vibrationY}px)`;
+            // Move center image
+            document.querySelector('.center-image').style.transform = 
+                `translate(-50%, -50%) translate(${vibrationX}px, ${vibrationY}px)`;
             
-            // Dalga noktalarını güncelle
-            if (wavePoints.length === 0) initWavePoints();
-            
-            // Dalgaları çiz - BİRBİRİNE BAĞLI
-            ctx.beginPath();
-            
+            // Update wave points
             for (let i = 0; i < wavePoints.length; i++) {
                 const point = wavePoints[i];
                 
-                // Frekans verisini al
-                const freqIndex = Math.floor((i * bufferLength) / barsCount) % bufferLength;
-                const amplitude = dataArray[freqIndex] / 255;
+                // Get frequency data based on mode
+                let freqIndex;
+                if (waveMode === 'bass') {
+                    // Bass mode: focus on lower frequencies
+                    freqIndex = Math.floor((i * 100) / barsCount);
+                } else {
+                    // Normal mode: full spectrum
+                    freqIndex = Math.floor((i * bufferLength) / barsCount);
+                }
                 
-                // Yumuşak geçiş
-                point.targetAmplitude = amplitude;
-                point.currentAmplitude += (point.targetAmplitude - point.currentAmplitude) * 0.1;
+                const amplitude = dataArray[freqIndex % bufferLength] / 255;
                 
-                // Dalga uzunluğu
-                const waveLength = circleRadius + (point.currentAmplitude * circleRadius * 3);
+                // Smooth animation
+                const acceleration = (amplitude - point.currentAmplitude) * 0.1;
+                point.velocity += acceleration;
+                point.velocity *= 0.9; // Damping
+                point.currentAmplitude += point.velocity;
                 
-                // Nokta pozisyonu - DAİREDEN ÇIKAN
+                // Wave length
+                const waveLength = circleRadius + (point.currentAmplitude * circleRadius * 
+                    (waveMode === 'bass' ? 4 : 3));
+                
+                // Calculate point position
                 const x = centerX + vibrationX + Math.cos(point.angle) * waveLength;
                 const y = centerY + vibrationY + Math.sin(point.angle) * waveLength;
                 
-                if (i === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
+                point.x = x;
+                point.y = y;
             }
             
-            // Dalga rengi
-            const hue = 200 + (intensity * 100);
+            // Draw wave
+            ctx.beginPath();
+            ctx.moveTo(wavePoints[0].x, wavePoints[0].y);
+            
+            for (let i = 1; i < wavePoints.length; i++) {
+                const point = wavePoints[i];
+                const prevPoint = wavePoints[i - 1];
+                
+                // Smooth curve
+                const cpX = (prevPoint.x + point.x) / 2;
+                const cpY = (prevPoint.y + point.y) / 2;
+                
+                ctx.quadraticCurveTo(prevPoint.x, prevPoint.y, cpX, cpY);
+            }
+            
+            // Close the path
             ctx.closePath();
-            ctx.fillStyle = `hsla(${hue}, 100%, 60%, ${0.3 + intensity * 0.3})`;
+            
+            // Wave gradient
+            const waveGradient = ctx.createRadialGradient(
+                centerX + vibrationX, centerY + vibrationY, circleRadius,
+                centerX + vibrationX, centerY + vibrationY, circleRadius * 3
+            );
+            
+            const rgb = hexToRgb(waveColor);
+            waveGradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.6 + intensity * 0.4})`);
+            waveGradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`);
+            
+            ctx.fillStyle = waveGradient;
             ctx.fill();
             
-            // Dalga kenar çizgisi
-            ctx.strokeStyle = `hsla(${hue}, 100%, 70%, ${0.7 + intensity * 0.3})`;
+            // Wave border
+            ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.8 + intensity * 0.2})`;
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // İç daire (görselin olduğu yer)
+            // Center circle
             ctx.beginPath();
             ctx.arc(centerX + vibrationX, centerY + vibrationY, circleRadius, 0, Math.PI * 2);
             
-            const innerGradient = ctx.createRadialGradient(
+            const centerGradient = ctx.createRadialGradient(
                 centerX + vibrationX, centerY + vibrationY, 0,
                 centerX + vibrationX, centerY + vibrationY, circleRadius
             );
-            innerGradient.addColorStop(0, `rgba(14, 165, 233, ${0.4 + intensity * 0.2})`);
-            innerGradient.addColorStop(1, `rgba(99, 102, 241, ${0.2 + intensity * 0.1})`);
+            centerGradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`);
+            centerGradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`);
             
-            ctx.fillStyle = innerGradient;
+            ctx.fillStyle = centerGradient;
             ctx.fill();
             
-            // Video kaydı
+            // Capture frame for recording
             if (isRecording && capturer) {
                 capturer.capture(canvas);
-            }
-            
-            animationFrameId = requestAnimationFrame(drawVisualizer);
-        }
-        
-        // Video kaydını başlat
-        function startRecording() {
-            if (!isPlaying) {
-                alert("Önce şarkıyı oynatın.");
-                return;
-            }
-            
-            isRecording = true;
-            
-            // CCapture ile video kaydı
-            capturer = new CCapture({
-                format: 'webm',
-                framerate: 30,
-                quality: 90,
-                name: `ses_visualizer_${Date.now()}`
-            });
-            
-            capturer.start();
-            
-            // Şarkı bittiğinde kaydı durdur
-            audioElement.addEventListener('ended', stopRecording);
-            
-            alert("Video kaydı başladı! Şarkı bittiğinde otomatik indirilecek.");
-        }
-        
-        // Video kaydını durdur ve indir
-        function stopRecording() {
-            if (!isRecording || !capturer) return;
-            
-            isRecording = false;
-            capturer.stop();
-            
-            capturer.save(function(blob) {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `ses_visualizer_${Date.now()}.webm`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
                 
-                alert("Video indirildi!");
-            });
-            
-            if (audioElement.ended) {
-                isPlaying = false;
-                playBtn.disabled = false;
-                pauseBtn.disabled = true;
-                stopBtn.disabled = true;
+                // Check if recording should stop
+                if (audioElement.paused || audioElement.ended) {
+                    stopRecording();
+                }
             }
+            
+            animationId = requestAnimationFrame(drawVisualizer);
         }
         
-        // Kontrol butonları
-        playBtn.addEventListener('click', function() {
-            if (!isInitialized) {
-                alert("Lütfen önce bir ses dosyası yükleyin.");
+        // HEX to RGB converter
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 14, g: 165, b: 233 };
+        }
+        
+        // Controls
+        playBtn.addEventListener('click', () => {
+            if (!audioElement.src) {
+                alert('Lütfen önce bir ses dosyası yükleyin.');
                 return;
             }
             
@@ -841,62 +942,156 @@
                     pauseBtn.disabled = false;
                     stopBtn.disabled = false;
                     
-                    initWavePoints();
-                    animationFrameId = requestAnimationFrame(drawVisualizer);
+                    animationId = requestAnimationFrame(drawVisualizer);
                 })
-                .catch(error => {
-                    alert("Ses oynatılamadı.");
+                .catch(err => {
+                    console.error('Playback error:', err);
+                    alert('Ses oynatılamadı. Lütfen tekrar deneyin.');
                 });
         });
         
-        pauseBtn.addEventListener('click', function() {
+        pauseBtn.addEventListener('click', () => {
             audioElement.pause();
             isPlaying = false;
             playBtn.disabled = false;
             pauseBtn.disabled = true;
         });
         
-        stopBtn.addEventListener('click', function() {
+        stopBtn.addEventListener('click', () => {
             audioElement.pause();
             audioElement.currentTime = 0;
             isPlaying = false;
+            resetControls();
+            
+            if (isRecording) {
+                stopRecording();
+            }
+        });
+        
+        function resetControls() {
             playBtn.disabled = false;
             pauseBtn.disabled = true;
             stopBtn.disabled = true;
-        });
+        }
         
-        // Ses düzeyi
-        volumeSlider.addEventListener('input', function() {
+        // Volume Control
+        volumeSlider.addEventListener('input', () => {
             const volume = volumeSlider.value / 100;
             audioElement.volume = volume;
             volumeValue.textContent = `${volumeSlider.value}%`;
         });
         
-        // Video indir
-        downloadBtn.addEventListener('click', function() {
-            if (!isInitialized) {
-                alert("Lütfen önce bir ses dosyası yükleyin.");
+        // Recording System
+        downloadBtn.addEventListener('click', async () => {
+            if (!audioElement.src) {
+                alert('Lütfen önce bir ses dosyası yükleyin.');
                 return;
             }
             
-            if (isPlaying) {
-                startRecording();
+            if (isRecording) {
+                // Stop recording
+                stopRecording();
             } else {
-                // Önce oynat sonra kaydet
-                playBtn.click();
-                setTimeout(startRecording, 100);
+                // Start recording
+                await startRecording();
             }
         });
         
-        // Şarkı bittiğinde
-        audioElement.addEventListener('ended', function() {
-            if (isRecording) {
-                stopRecording();
+        async function startRecording() {
+            if (!audioContext) {
+                initAudioSystem();
             }
+            
+            // Reset audio to start
+            audioElement.currentTime = 0;
+            
+            // Start playback
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            
+            await audioElement.play();
+            
+            // Set playing state
+            isPlaying = true;
+            playBtn.disabled = true;
+            pauseBtn.disabled = false;
+            stopBtn.disabled = false;
+            
+            // Start visualization
+            animationId = requestAnimationFrame(drawVisualizer);
+            
+            // Start recording
+            isRecording = true;
+            recordingIndicator.classList.add('active');
+            downloadBtn.innerHTML = '<i class="fas fa-stop-circle"></i> Kaydı Durdur';
+            downloadBtn.style.background = '#ef4444';
+            
+            // Setup capturer
+            capturer = new CCapture({
+                format: 'webm',
+                framerate: 30,
+                quality: 90,
+                verbose: true,
+                display: true,
+                timeLimit: audioElement.duration || 300,
+                name: `ses_gorselleştirici_${Date.now()}`
+            });
+            
+            capturer.start();
+            recordingStartTime = Date.now();
+            
+            // Auto-stop when audio ends
+            audioElement.addEventListener('ended', () => {
+                if (isRecording) {
+                    setTimeout(stopRecording, 500); // Small delay for last frame
+                }
+            });
+        }
+        
+        function stopRecording() {
+            if (!isRecording || !capturer) return;
+            
+            isRecording = false;
+            recordingIndicator.classList.remove('active');
+            downloadBtn.innerHTML = '<i class="fas fa-video"></i> Video Kaydet';
+            downloadBtn.style.background = '';
+            
+            capturer.stop();
+            
+            capturer.save((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ses_gorselleştirici_${Date.now()}.webm`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert('Video başarıyla indirildi!');
+            });
+            
+            capturer = null;
+        }
+        
+        // Clean up when changing audio
+        audioElement.addEventListener('play', () => {
+            if (!animationId) {
+                animationId = requestAnimationFrame(drawVisualizer);
+            }
+        });
+        
+        audioElement.addEventListener('pause', () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        });
+        
+        audioElement.addEventListener('ended', () => {
             isPlaying = false;
-            playBtn.disabled = false;
-            pauseBtn.disabled = true;
-            stopBtn.disabled = true;
+            resetControls();
         });
     </script>
 </body>
