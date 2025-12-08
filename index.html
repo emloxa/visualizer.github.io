@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mükemmel Ses Görselleştirici</title>
+    <title>EMLOXA VISUALIZER</title>
     <style>
         * {
             margin: 0;
@@ -13,14 +13,14 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a14;
+            background: #000;
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -29,20 +29,26 @@
             text-align: center;
             margin-bottom: 25px;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
+            background: linear-gradient(90deg, rgba(255,0,0,0.2), rgba(0,255,0,0.2), rgba(0,0,255,0.2));
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 10px;
-            color: #0ea5e9;
-            text-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
+            background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            font-weight: 800;
+            letter-spacing: 2px;
         }
         
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #94a3b8;
             max-width: 800px;
             margin: 0 auto;
@@ -51,7 +57,7 @@
         
         .content {
             display: grid;
-            grid-template-columns: 320px 1fr;
+            grid-template-columns: 350px 1fr;
             gap: 25px;
         }
         
@@ -72,17 +78,18 @@
             border-radius: 15px;
             padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
         }
         
         .section-title {
             font-size: 1.2rem;
-            color: #0ea5e9;
+            color: #fff;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
             padding-bottom: 10px;
-            border-bottom: 2px solid rgba(14, 165, 233, 0.3);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
         }
         
         .upload-area {
@@ -106,14 +113,17 @@
         }
         
         .upload-box:hover {
-            border-color: #0ea5e9;
-            background: rgba(14, 165, 233, 0.1);
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
             transform: translateY(-2px);
         }
         
         .upload-icon {
             font-size: 2.5rem;
-            color: #0ea5e9;
+            background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         
         .upload-text h4 {
@@ -137,7 +147,7 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: none;
-            border-left: 4px solid #0ea5e9;
+            border-left: 4px solid #00ff00;
         }
         
         .file-info.active {
@@ -174,7 +184,7 @@
         }
         
         .control-btn {
-            background: linear-gradient(135deg, #0ea5e9, #0369a1);
+            background: linear-gradient(135deg, rgba(255,0,0,0.7), rgba(0,255,0,0.7));
             color: white;
             border: none;
             border-radius: 10px;
@@ -191,7 +201,7 @@
         
         .control-btn:hover:not(:disabled) {
             transform: translateY(-3px);
-            background: linear-gradient(135deg, #0284c7, #075985);
+            background: linear-gradient(135deg, rgba(255,0,0,0.9), rgba(0,255,0,0.9));
         }
         
         .control-btn:disabled {
@@ -202,12 +212,12 @@
         }
         
         .download-btn {
-            background: linear-gradient(135deg, #10b981, #047857);
+            background: linear-gradient(135deg, rgba(0,255,0,0.7), rgba(0,0,255,0.7));
             grid-column: span 3;
         }
         
         .download-btn:hover:not(:disabled) {
-            background: linear-gradient(135deg, #059669, #065f46);
+            background: linear-gradient(135deg, rgba(0,255,0,0.9), rgba(0,0,255,0.9));
         }
         
         .settings {
@@ -232,7 +242,7 @@
         
         .wave-mode-selector {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
         }
         
@@ -250,46 +260,51 @@
         }
         
         .wave-mode-btn.active {
-            background: #0ea5e9;
-            border-color: #0ea5e9;
+            background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff);
+            border-color: transparent;
             color: white;
         }
         
-        .theme-selector {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 5px;
-        }
-        
-        .theme-color {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .theme-color.active {
-            border-color: white;
-            transform: scale(1.1);
-        }
-        
-        .custom-color {
+        .rgb-controls {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 15px;
             margin-top: 10px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        #waveColorPicker {
-            width: 45px;
-            height: 45px;
-            border: none;
+        .rgb-slider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .rgb-slider label {
+            min-width: 60px;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .rgb-slider input {
+            flex: 1;
+        }
+        
+        .rgb-value {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .rgb-preview {
+            width: 100%;
+            height: 40px;
             border-radius: 8px;
-            cursor: pointer;
-            background: transparent;
+            margin-top: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
         .visualizer-section {
@@ -309,14 +324,14 @@
             align-items: center;
             position: relative;
             overflow: hidden;
-            min-height: 550px;
+            min-height: 600px;
         }
         
         #visualizerCanvas {
             display: block;
             border-radius: 12px;
             width: 100% !important;
-            height: 500px !important;
+            height: 550px !important;
             background: transparent;
         }
         
@@ -325,8 +340,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 160px;
-            height: 160px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid rgba(255, 255, 255, 0.3);
@@ -334,6 +349,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
         }
         
         #centerImage {
@@ -350,14 +366,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.2));
+            background: linear-gradient(135deg, rgba(255,0,0,0.2), rgba(0,255,0,0.2), rgba(0,0,255,0.2));
             color: rgba(255, 255, 255, 0.7);
             text-align: center;
             padding: 15px;
         }
         
         .default-circle i {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin-bottom: 10px;
             display: block;
         }
@@ -390,7 +406,7 @@
         
         .loading {
             text-align: center;
-            color: #0ea5e9;
+            color: #00ff00;
             font-size: 1rem;
             display: none;
             flex-direction: column;
@@ -406,8 +422,8 @@
         .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(14, 165, 233, 0.2);
-            border-top: 4px solid #0ea5e9;
+            border: 4px solid rgba(0, 255, 0, 0.2);
+            border-top: 4px solid #00ff00;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -427,22 +443,14 @@
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        /* Temalar için renkler */
-        .theme-blue { background: linear-gradient(135deg, #0ea5e9, #3b82f6); }
-        .theme-purple { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
-        .theme-green { background: linear-gradient(135deg, #10b981, #14b8a6); }
-        .theme-red { background: linear-gradient(135deg, #ef4444, #f97316); }
-        .theme-pink { background: linear-gradient(135deg, #ec4899, #d946ef); }
-        .theme-cyan { background: linear-gradient(135deg, #06b6d4, #0ea5e9); }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-wave-square"></i> Mükemmel Ses Görselleştirici</h1>
-            <p class="subtitle">360° dalgalar, özelleştirilebilir temalar ve MP4 video kaydı</p>
+            <h1><i class="fas fa-wave-square"></i> EMLOXA VISUALIZER</h1>
+            <p class="subtitle">Profesyonel ses görselleştirici - 1440p video kaydı ve RGB efektleri</p>
         </header>
         
         <div class="content">
@@ -473,14 +481,14 @@
                             </div>
                             <div class="upload-text">
                                 <h4>Merkez Görsel</h4>
-                                <p>İsteğe bağlı - daire içinde görünür</p>
+                                <p>Zorunlu - daire içinde görünür</p>
                             </div>
                         </label>
-                        <input type="file" id="imageUpload" accept="image/*">
+                        <input type="file" id="imageUpload" accept="image/*" required>
                         
                         <div class="file-info" id="imageInfo">
-                            <div class="info-title" id="imageTitle">Merkez görsel yok</div>
-                            <div class="info-detail" id="imageSize">İsteğe bağlı olarak ekleyin</div>
+                            <div class="info-title" id="imageTitle">Merkez görsel gerekli</div>
+                            <div class="info-detail" id="imageSize">Lütfen bir görsel seçin</div>
                         </div>
                         
                         <label for="backgroundUpload" class="upload-box">
@@ -488,15 +496,15 @@
                                 <i class="fas fa-landscape"></i>
                             </div>
                             <div class="upload-text">
-                                <h4>Canvas Arkaplanı</h4>
-                                <p>Görselleştirici arkaplanı</p>
+                                <h4>Arkaplan Görseli</h4>
+                                <p>Zorunlu - görselleştirici arkaplanı</p>
                             </div>
                         </label>
-                        <input type="file" id="backgroundUpload" accept="image/*">
+                        <input type="file" id="backgroundUpload" accept="image/*" required>
                         
                         <div class="file-info" id="backgroundInfo">
-                            <div class="info-title" id="backgroundTitle">Varsayılan arkaplan aktif</div>
-                            <div class="info-detail">Özel arkaplan yükleyebilirsiniz</div>
+                            <div class="info-title" id="backgroundTitle">Arkaplan gerekli</div>
+                            <div class="info-detail">Lütfen bir arkaplan seçin</div>
                         </div>
                     </div>
                     
@@ -531,7 +539,7 @@
                             </label>
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <input type="range" id="volumeSlider" min="0" max="100" value="70" style="flex: 1;">
-                                <span id="volumeValue" style="color: #0ea5e9; font-weight: bold; min-width: 45px; font-size: 1.1rem;">70%</span>
+                                <span id="volumeValue" style="color: #00ff00; font-weight: bold; min-width: 45px; font-size: 1.1rem;">70%</span>
                             </div>
                         </div>
                     </div>
@@ -544,29 +552,37 @@
                         <div class="setting-group">
                             <label class="setting-label">Dalga Modu</label>
                             <div class="wave-mode-selector">
-                                <button class="wave-mode-btn active" data-mode="normal">
-                                    <i class="fas fa-wave-square"></i> Normal
+                                <button class="wave-mode-btn active" data-mode="rgb">
+                                    <i class="fas fa-wave-square"></i> RGB
                                 </button>
                                 <button class="wave-mode-btn" data-mode="bass">
                                     <i class="fas fa-drum"></i> Bass
+                                </button>
+                                <button class="wave-mode-btn" data-mode="spectrum">
+                                    <i class="fas fa-chart-bar"></i> Spectrum
                                 </button>
                             </div>
                         </div>
                         
                         <div class="setting-group">
-                            <label class="setting-label">Dalga Renkleri</label>
-                            <div class="theme-selector">
-                                <div class="theme-color theme-blue active" data-color="#0ea5e9"></div>
-                                <div class="theme-color theme-purple" data-color="#8b5cf6"></div>
-                                <div class="theme-color theme-green" data-color="#10b981"></div>
-                                <div class="theme-color theme-red" data-color="#ef4444"></div>
-                                <div class="theme-color theme-pink" data-color="#ec4899"></div>
-                                <div class="theme-color theme-cyan" data-color="#06b6d4"></div>
-                            </div>
-                            
-                            <div class="custom-color">
-                                <label class="setting-label">Özel Renk:</label>
-                                <input type="color" id="waveColorPicker" value="#0ea5e9">
+                            <label class="setting-label">RGB Dalga Kontrolleri</label>
+                            <div class="rgb-controls">
+                                <div class="rgb-slider">
+                                    <label style="color: #ff0000;">Kırmızı:</label>
+                                    <input type="range" id="redSlider" min="0" max="255" value="255">
+                                    <span id="redValue" class="rgb-value" style="color: #ff0000;">255</span>
+                                </div>
+                                <div class="rgb-slider">
+                                    <label style="color: #00ff00;">Yeşil:</label>
+                                    <input type="range" id="greenSlider" min="0" max="255" value="0">
+                                    <span id="greenValue" class="rgb-value" style="color: #00ff00;">0</span>
+                                </div>
+                                <div class="rgb-slider">
+                                    <label style="color: #0000ff;">Mavi:</label>
+                                    <input type="range" id="blueSlider" min="0" max="255" value="255">
+                                    <span id="blueValue" class="rgb-value" style="color: #0000ff;">255</span>
+                                </div>
+                                <div class="rgb-preview" id="rgbPreview"></div>
                             </div>
                         </div>
                     </div>
@@ -592,7 +608,7 @@
         </div>
         
         <footer>
-            <p>© 2024 Mükemmel Ses Görselleştirici | Tüm sorunlar çözüldü!</p>
+            <p>© 2024 EMLOXA VISUALIZER | Profesyonel Ses Görselleştirme Sistemi</p>
         </footer>
     </div>
 
@@ -625,9 +641,16 @@
         const defaultCircle = document.getElementById('defaultCircle');
         const recordingIndicator = document.getElementById('recordingIndicator');
         
+        // RGB Kontrolleri
+        const redSlider = document.getElementById('redSlider');
+        const greenSlider = document.getElementById('greenSlider');
+        const blueSlider = document.getElementById('blueSlider');
+        const redValue = document.getElementById('redValue');
+        const greenValue = document.getElementById('greenValue');
+        const blueValue = document.getElementById('blueValue');
+        const rgbPreview = document.getElementById('rgbPreview');
+        
         const waveModeBtns = document.querySelectorAll('.wave-mode-btn');
-        const themeColors = document.querySelectorAll('.theme-color');
-        const waveColorPicker = document.getElementById('waveColorPicker');
         
         // Canvas Context
         const ctx = canvas.getContext('2d');
@@ -644,14 +667,13 @@
         let isPlaying = false;
         let currentAudioUrl = null;
         let currentImage = null;
-        let backgroundImage = new Image();
-        
-        // Varsayılan arkaplan görseli
-        backgroundImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cdefs%3E%3CradialGradient id='a' cx='400' cy='300' r='400' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23000b1e'/%3E%3Cstop offset='1' stop-color='%23000'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='600'/%3E%3Ccircle cx='400' cy='300' r='5' fill='%230ea5e9' opacity='0.3'/%3E%3Ccircle cx='200' cy='150' r='3' fill='%238b5cf6' opacity='0.2'/%3E%3Ccircle cx='600' cy='450' r='4' fill='%2310b981' opacity='0.2'/%3E%3Ccircle cx='300' cy='500' r='3' fill='%23ec4899' opacity='0.2'/%3E%3Ccircle cx='500' cy='100' r='4' fill='%2306b6d4' opacity='0.2'/%3E%3C/svg%3E";
+        let backgroundImage = null;
         
         // Visualization Settings
-        let waveMode = 'normal';
-        let waveColor = '#0ea5e9';
+        let waveMode = 'rgb';
+        let redColor = 255;
+        let greenColor = 0;
+        let blueColor = 255;
         let isRecording = false;
         let mediaRecorder = null;
         let videoChunks = [];
@@ -660,17 +682,22 @@
         // Animation
         let animationId = null;
         let wavePoints = [];
-        const barsCount = 100;
+        const barsCount = 200; // Artırıldı
         
         // Merkez daire büyüme için
         let circleScale = 1;
         let targetCircleScale = 1;
         
+        // RGB preview'i güncelle
+        function updateRGBPreview() {
+            rgbPreview.style.background = `rgb(${redColor}, ${greenColor}, ${blueColor})`;
+        }
+        
         // Canvas Setup
         function setupCanvas() {
             const container = canvas.parentElement;
             const containerWidth = container.clientWidth - 50;
-            const containerHeight = 500;
+            const containerHeight = 550;
             
             const dpi = window.devicePixelRatio || 1;
             canvas.style.width = containerWidth + 'px';
@@ -688,28 +715,41 @@
             imageInfo.classList.add('active');
             backgroundInfo.classList.add('active');
             
-            // Temalar için event listeners
-            themeColors.forEach(color => {
-                color.addEventListener('click', () => {
-                    themeColors.forEach(c => c.classList.remove('active'));
-                    color.classList.add('active');
-                    waveColor = color.dataset.color;
-                    waveColorPicker.value = waveColor;
-                });
+            // RGB slider event listeners
+            redSlider.addEventListener('input', (e) => {
+                redColor = parseInt(e.target.value);
+                redValue.textContent = redColor;
+                updateRGBPreview();
             });
             
-            waveColorPicker.addEventListener('input', (e) => {
-                waveColor = e.target.value;
-                themeColors.forEach(c => c.classList.remove('active'));
+            greenSlider.addEventListener('input', (e) => {
+                greenColor = parseInt(e.target.value);
+                greenValue.textContent = greenColor;
+                updateRGBPreview();
             });
             
+            blueSlider.addEventListener('input', (e) => {
+                blueColor = parseInt(e.target.value);
+                blueValue.textContent = blueColor;
+                updateRGBPreview();
+            });
+            
+            updateRGBPreview();
+            
+            // Wave mode event listeners
             waveModeBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     waveModeBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     waveMode = btn.dataset.mode;
                     if (analyser) {
-                        analyser.fftSize = waveMode === 'bass' ? 256 : 1024;
+                        if (waveMode === 'bass') {
+                            analyser.fftSize = 128;
+                        } else if (waveMode === 'spectrum') {
+                            analyser.fftSize = 2048;
+                        } else {
+                            analyser.fftSize = 1024;
+                        }
                         bufferLength = analyser.frequencyBinCount;
                         dataArray = new Uint8Array(bufferLength);
                     }
@@ -719,7 +759,7 @@
         
         window.addEventListener('resize', setupCanvas);
         
-        // Audio File Handler - SORUN ÇÖZÜLDÜ
+        // Audio File Handler - GELİŞTİRİLDİ
         audioUpload.addEventListener('change', handleAudioFile);
         
         function handleAudioFile(e) {
@@ -760,7 +800,7 @@
             }, { once: true });
         }
         
-        // Audio sistemini temizle
+        // Audio sistemini temizle - GELİŞTİRİLDİ
         function cleanUpAudioSystem() {
             // Eski audio context'i temizle
             if (audioSource) {
@@ -773,7 +813,7 @@
                 analyser = null;
             }
             
-            if (audioContext) {
+            if (audioContext && audioContext.state !== 'closed') {
                 audioContext.close().then(() => {
                     audioContext = null;
                 }).catch(console.error);
@@ -788,6 +828,7 @@
             // Eski sesi durdur ve temizle
             audioElement.pause();
             audioElement.src = '';
+            audioElement.currentTime = 0;
             
             // Eski URL'i temizle
             if (currentAudioUrl) {
@@ -799,7 +840,7 @@
             resetControls();
         }
         
-        // Image File Handler (merkez daire için) - SORUN ÇÖZÜLDÜ
+        // Image File Handler - GELİŞTİRİLDİ
         imageUpload.addEventListener('change', handleImageFile);
         
         function handleImageFile(e) {
@@ -837,7 +878,7 @@
             reader.readAsDataURL(file);
         }
         
-        // Background File Handler - Canvas içinde arkaplan
+        // Background File Handler - GELİŞTİRİLDİ
         backgroundUpload.addEventListener('change', handleBackgroundFile);
         
         function handleBackgroundFile(e) {
@@ -850,6 +891,7 @@
                 img.onload = () => {
                     backgroundImage = img;
                     backgroundTitle.textContent = file.name;
+                    backgroundInfo.classList.add('active');
                 };
                 img.onerror = () => {
                     alert('Arkaplan görseli yüklenemedi.');
@@ -866,7 +908,7 @@
         document.querySelectorAll('.upload-box').forEach(box => {
             box.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                box.style.borderColor = '#0ea5e9';
+                box.style.borderColor = '#00ff00';
                 box.style.transform = 'translateY(-2px)';
             });
             
@@ -904,7 +946,8 @@
             audioSource = audioContext.createMediaElementSource(audioElement);
             analyser = audioContext.createAnalyser();
             
-            analyser.fftSize = waveMode === 'bass' ? 256 : 1024;
+            analyser.fftSize = waveMode === 'bass' ? 128 : waveMode === 'spectrum' ? 2048 : 1024;
+            analyser.smoothingTimeConstant = 0.8;
             bufferLength = analyser.frequencyBinCount;
             dataArray = new Uint8Array(bufferLength);
             
@@ -914,7 +957,7 @@
             initWavePoints();
         }
         
-        // Initialize Wave Points
+        // Initialize Wave Points - GELİŞTİRİLDİ
         function initWavePoints() {
             wavePoints = [];
             const angleStep = (Math.PI * 2) / barsCount;
@@ -928,7 +971,7 @@
             }
         }
         
-        // Draw Visualizer
+        // Draw Visualizer - BÜYÜK DALGALAR İÇİN GELİŞTİRİLDİ
         function drawVisualizer(timestamp) {
             if (!isPlaying || !analyser) {
                 animationId = requestAnimationFrame(drawVisualizer);
@@ -942,27 +985,15 @@
             ctx.clearRect(0, 0, width, height);
             
             // Canvas arkaplanını çiz
-            if (backgroundImage.complete) {
-                // Arkaplan titreşimi
-                analyser.getByteFrequencyData(dataArray);
-                let totalIntensity = 0;
-                for (let i = 0; i < 20; i++) totalIntensity += dataArray[i];
-                const intensity = totalIntensity / 20 / 255;
-                
-                // Arkaplan titreşim efekti
-                const bgVibrationX = Math.sin(timestamp * 0.001) * intensity * 5;
-                const bgVibrationY = Math.cos(timestamp * 0.0012) * intensity * 3;
-                
-                // Arkaplanı çiz
+            if (backgroundImage && backgroundImage.complete) {
                 ctx.save();
-                ctx.translate(bgVibrationX, bgVibrationY);
-                ctx.globalAlpha = 0.2;
+                ctx.globalAlpha = 0.3;
                 ctx.drawImage(backgroundImage, 0, 0, width, height);
                 ctx.restore();
             }
             
             // Koyu overlay
-            ctx.fillStyle = `rgba(0, 0, 0, ${0.7})`;
+            ctx.fillStyle = `rgba(0, 0, 0, ${0.6})`;
             ctx.fillRect(0, 0, width, height);
             
             // Get frequency data
@@ -975,20 +1006,20 @@
             
             // Bass yoğunluğunu hesapla
             let bassIntensity = 0;
-            for (let i = 0; i < 5; i++) bassIntensity += dataArray[i];
-            bassIntensity = bassIntensity / 5 / 255;
+            for (let i = 0; i < 10; i++) bassIntensity += dataArray[i];
+            bassIntensity = bassIntensity / 10 / 255;
             
             // MERKEZ DAİRE: Bas patlamalarında büyür
             if (waveMode === 'bass' && bassIntensity > 0.5) {
-                targetCircleScale = 1 + (bassIntensity * 0.4); // Bass modunda %40'a kadar
-            } else if (bassIntensity > 0.3) {
-                targetCircleScale = 1 + (bassIntensity * 0.2); // Normalde %20'ye kadar
+                targetCircleScale = 1 + (bassIntensity * 0.6);
+            } else if (waveMode === 'rgb' && bassIntensity > 0.3) {
+                targetCircleScale = 1 + (bassIntensity * 0.4);
             } else {
                 targetCircleScale = 1;
             }
             
             // Yumuşak geçiş
-            circleScale += (targetCircleScale - circleScale) * 0.1;
+            circleScale += (targetCircleScale - circleScale) * 0.08;
             
             // Update wave points
             for (let i = 0; i < wavePoints.length; i++) {
@@ -996,7 +1027,9 @@
                 
                 let freqIndex;
                 if (waveMode === 'bass') {
-                    freqIndex = Math.floor((i * 20) / barsCount);
+                    freqIndex = Math.floor((i * 30) / barsCount);
+                } else if (waveMode === 'spectrum') {
+                    freqIndex = Math.floor((i * bufferLength * 0.8) / barsCount);
                 } else {
                     freqIndex = Math.floor((i * bufferLength) / barsCount);
                 }
@@ -1004,11 +1037,11 @@
                 const amplitude = dataArray[freqIndex % bufferLength] / 255;
                 
                 // Yumuşak geçiş
-                point.smoothAmplitude += (amplitude - point.smoothAmplitude) * 0.15;
+                point.smoothAmplitude += (amplitude - point.smoothAmplitude) * 0.1;
                 point.currentAmplitude = point.smoothAmplitude;
                 
-                // Dalga uzunluğu (küçültülmüş)
-                const waveLength = circleRadius * circleScale + (point.currentAmplitude * circleRadius * 1.2 * 0.35);
+                // DALGA UZUNLUĞU 3 KAT DAHA BÜYÜK
+                const waveLength = circleRadius * circleScale + (point.currentAmplitude * circleRadius * 3.0);
                 
                 // Dalga pozisyonu
                 const x = centerX + Math.cos(point.angle) * waveLength;
@@ -1035,21 +1068,29 @@
             ctx.closePath();
             
             // Wave gradient
+            let waveColor;
+            if (waveMode === 'rgb') {
+                waveColor = `rgb(${redColor}, ${greenColor}, ${blueColor})`;
+            } else {
+                waveColor = '#0ea5e9';
+            }
+            
             const rgb = hexToRgb(waveColor);
             const waveGradient = ctx.createRadialGradient(
                 centerX, centerY, circleRadius * circleScale,
-                centerX, centerY, circleRadius * circleScale * 2
+                centerX, centerY, circleRadius * circleScale * 3
             );
             
-            waveGradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.6})`);
-            waveGradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`);
+            waveGradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.8})`);
+            waveGradient.addColorStop(0.5, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`);
+            waveGradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`);
             
             ctx.fillStyle = waveGradient;
             ctx.fill();
             
             // Wave border
             ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.9})`;
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 3;
             ctx.stroke();
             
             // Merkez daire boyutunu güncelle
@@ -1057,15 +1098,41 @@
             centerCircle.style.width = `${currentCircleRadius * 2}px`;
             centerCircle.style.height = `${currentCircleRadius * 2}px`;
             
-            // Bass efekti
-            if (waveMode === 'bass' && bassIntensity > 0.5) {
+            // Spectrum modu için ek efektler
+            if (waveMode === 'spectrum') {
                 // Ekstra parlaklık efekti
-                ctx.strokeStyle = `rgba(255, 255, 255, ${bassIntensity * 0.3})`;
-                ctx.lineWidth = 4;
+                ctx.strokeStyle = `rgba(255, 255, 255, ${bassIntensity * 0.5})`;
+                ctx.lineWidth = 5;
                 ctx.stroke();
+            }
+            
+            // RGB efektleri
+            if (waveMode === 'rgb') {
+                // RGB yanıp sönme efekti
+                const time = timestamp * 0.001;
+                const r = Math.sin(time * 1.5) * 127 + 128;
+                const g = Math.sin(time * 2.0) * 127 + 128;
+                const b = Math.sin(time * 2.5) * 127 + 128;
                 
-                // Hafif titreme efekti
-                centerCircle.style.transform = `translate(-50%, -50%) translate(${Math.sin(timestamp * 0.01) * bassIntensity * 3}px, ${Math.cos(timestamp * 0.01) * bassIntensity * 3}px)`;
+                // İç dalga efekti
+                ctx.beginPath();
+                for (let i = 0; i < wavePoints.length; i++) {
+                    const point = wavePoints[i];
+                    const innerRadius = circleRadius * circleScale + (point.currentAmplitude * circleRadius * 1.5);
+                    const x = centerX + Math.cos(point.angle) * innerRadius;
+                    const y = centerY + Math.sin(point.angle) * innerRadius;
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.closePath();
+                
+                ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.6)`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
             }
             
             animationId = requestAnimationFrame(drawVisualizer);
@@ -1073,18 +1140,39 @@
         
         // HEX to RGB converter
         function hexToRgb(hex) {
+            if (hex.startsWith('rgb')) {
+                const matches = hex.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                if (matches) {
+                    return {
+                        r: parseInt(matches[1]),
+                        g: parseInt(matches[2]),
+                        b: parseInt(matches[3])
+                    };
+                }
+            }
+            
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             return result ? {
                 r: parseInt(result[1], 16),
                 g: parseInt(result[2], 16),
                 b: parseInt(result[3], 16)
-            } : { r: 14, g: 165, b: 233 };
+            } : { r: 255, g: 0, b: 255 };
         }
         
         // Controls
         playBtn.addEventListener('click', async () => {
             if (!audioElement.src) {
                 alert('Lütfen önce bir ses dosyası yükleyin.');
+                return;
+            }
+            
+            if (!backgroundImage) {
+                alert('Lütfen arkaplan görseli yükleyin.');
+                return;
+            }
+            
+            if (!currentImage) {
+                alert('Lütfen merkez görsel yükleyin.');
                 return;
             }
             
@@ -1103,7 +1191,9 @@
                 pauseBtn.disabled = false;
                 stopBtn.disabled = false;
                 
-                animationId = requestAnimationFrame(drawVisualizer);
+                if (!animationId) {
+                    animationId = requestAnimationFrame(drawVisualizer);
+                }
             } catch (err) {
                 console.error('Playback error:', err);
                 alert('Ses oynatılamadı. Tarayıcı izni gerekebilir.');
@@ -1141,10 +1231,20 @@
             volumeValue.textContent = `${volumeSlider.value}%`;
         });
         
-        // MP4 Video Recording System
+        // GELİŞTİRİLMİŞ MP4 Video Recording System
         downloadBtn.addEventListener('click', async () => {
             if (!audioElement.src) {
                 alert('Lütfen önce bir ses dosyası yükleyin.');
+                return;
+            }
+            
+            if (!backgroundImage) {
+                alert('Lütfen arkaplan görseli yükleyin.');
+                return;
+            }
+            
+            if (!currentImage) {
+                alert('Lütfen merkez görsel yükleyin.');
                 return;
             }
             
@@ -1177,7 +1277,9 @@
                 stopBtn.disabled = false;
                 
                 // Görselleştirmeyi başlat
-                animationId = requestAnimationFrame(drawVisualizer);
+                if (!animationId) {
+                    animationId = requestAnimationFrame(drawVisualizer);
+                }
                 
                 // Kaydı başlat
                 isRecording = true;
@@ -1185,17 +1287,22 @@
                 downloadBtn.innerHTML = '<i class="fas fa-stop-circle"></i> Kaydı Durdur';
                 downloadBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
                 
-                // Canvas'ı video stream'e çevir
-                stream = canvas.captureStream(30);
+                // Tüm canvas'ı video stream'e çevir (merkez daire dahil)
+                stream = canvas.captureStream(60); // 60 FPS
+                
+                // High quality video settings
+                const videoBitsPerSecond = 20000000; // 20 Mbps
                 
                 // MediaRecorder ile kayıt
-                const mimeType = MediaRecorder.isTypeSupported('video/mp4') 
+                const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=h264') 
+                    ? 'video/webm;codecs=h264'
+                    : MediaRecorder.isTypeSupported('video/mp4') 
                     ? 'video/mp4' 
                     : 'video/webm';
                 
                 mediaRecorder = new MediaRecorder(stream, {
                     mimeType: mimeType,
-                    videoBitsPerSecond: 2000000
+                    videoBitsPerSecond: videoBitsPerSecond
                 });
                 
                 videoChunks = [];
@@ -1212,14 +1319,14 @@
                     
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `ses_gorselleştirici_${Date.now()}.${mimeType === 'video/mp4' ? 'mp4' : 'webm'}`;
+                    a.download = `emloxa_visualizer_${Date.now()}.${mimeType.includes('mp4') ? 'mp4' : 'webm'}`;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
                     
                     URL.revokeObjectURL(url);
                     
-                    alert('Video başarıyla indirildi!');
+                    alert('1440p kalitesinde video başarıyla indirildi!');
                 };
                 
                 mediaRecorder.start(100);
@@ -1231,11 +1338,11 @@
                     }
                 }, { once: true });
                 
-                alert('MP4 kaydı başladı! Şarkı bittiğinde veya durdur tuşuna basınca kayıt tamamlanacak ve indirilecek.');
+                alert('1440p MP4 kaydı başladı! Şarkı bittiğinde veya durdur tuşuna basınca kayıt tamamlanacak ve indirilecek.');
                 
             } catch (error) {
                 console.error('Kayıt hatası:', error);
-                alert('Video kaydı başlatılamadı.');
+                alert('Video kaydı başlatılamadı: ' + error.message);
                 stopRecording();
             }
         }
